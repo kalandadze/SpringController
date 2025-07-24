@@ -25,7 +25,7 @@ public class UserRestControllerService {
 
     public void register(User user) {
         checkValidity(user);
-        repository.addUsers(user);
+        repository.save(user);
     }
 
     public void login(String email, String password, HttpServletResponse response) {
@@ -43,12 +43,15 @@ public class UserRestControllerService {
     //private functions
 
     private void checkValidity(User newUser) {
-        User duplicateUser = repository.getUsers().stream().filter(user -> user.getEmail().equals(newUser.getEmail())).findFirst().orElse(null);
+//        User duplicateUser = repository.findAll().stream().filter(user -> user.getEmail().equals(newUser.getEmail())).findFirst().orElse(null);
+        User duplicateUser = repository.findAllByEmail(newUser.getEmail()).orElse(null);
+
         if (duplicateUser != null) throw new EmailTakenException(duplicateUser.getEmail());
     }
 
     private void login(String email, String password) {
-        repository.getUsers().stream().filter(user -> user.getEmail().equals(email) && user.getPassword().equals(password)).findFirst().orElseThrow(WrongPasswordOrEmailException::new);
+//        repository.findAll().stream().filter(user -> user.getEmail().equals(email) && user.getPassword().equals(password)).findFirst().orElseThrow(WrongPasswordOrEmailException::new);
+        repository.findByEmailAndPassword(email,password).orElseThrow(WrongPasswordOrEmailException::new);
     }
 
     private Cookie setupCookie(String email, int maxAge) {

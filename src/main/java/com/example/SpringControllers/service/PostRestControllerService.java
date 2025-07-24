@@ -34,12 +34,13 @@ public class PostRestControllerService {
 
     public void addPost(String postContent, HttpServletRequest request) {
         User user = getUser(request);
-        repository.addPost(new Post(user, postContent));
+        repository.save(new Post(user, postContent));
     }
 
     public PostCollectionDto getPosts(HttpServletRequest request) {
         String email = getUserEmail(request);
-        List<Post> posts = repository.getPosts().stream().filter(post -> post.getUser().getEmail().equals(email)).toList();
+//        List<Post> posts = repository.findAll().stream().filter(post -> post.getUser().getEmail().equals(email)).toList();
+        List<Post> posts=repository.findAllByUserEmail(email);
         return converter.convert(posts);
     }
 
@@ -48,7 +49,8 @@ public class PostRestControllerService {
 
     private User getUser(HttpServletRequest req) {
         String email = getUserEmail(req);
-        return userRepository.getUsers().stream().filter(x -> x.getEmail().equals(email)).findFirst().orElseThrow(() -> new EmailNotFoundException(email));
+//        return userRepository.findAll().stream().filter(x -> x.getEmail().equals(email)).findFirst().orElseThrow(() -> new EmailNotFoundException(email));
+        return userRepository.findByEmail(email).orElseThrow(() -> new EmailNotFoundException(email));
     }
 
 
