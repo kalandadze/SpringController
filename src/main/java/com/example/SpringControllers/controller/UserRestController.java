@@ -30,7 +30,7 @@ public class UserRestController {
     }
 
     @GetMapping("/login")
-    public ResponseEntity<?> Login(@RequestParam String email, @RequestParam String password, HttpServletResponse response){
+    public ResponseEntity<?> login(@RequestParam String email, @RequestParam String password, HttpServletResponse response){
         try {
              service.login(email,password,response);
             return ResponseEntity.status(HttpStatus.OK).body("Successfully logged in");
@@ -40,7 +40,7 @@ public class UserRestController {
     }
 
     @GetMapping("/logout")
-    public ResponseEntity<?> Login(HttpServletResponse response){
+    public ResponseEntity<?> logout(HttpServletResponse response){
         try {
              service.logout(response);
             return ResponseEntity.status(HttpStatus.OK).body("Successfully logged out");
